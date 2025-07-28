@@ -6,6 +6,7 @@ export default class GameBoard {
     this.height = boardHeight;
     this.missedAttacks = [];
     this.shipCords = {};
+    this.allShips = [];
   }
 
   placeShip(startCord, direction, length) {
@@ -33,5 +34,28 @@ export default class GameBoard {
         hit: false,
       };
     }
+    this.allShips.push(ship);
+  }
+
+  receiveAttack(cord) {
+    // doesn't check if cord already hit or in missed attacks
+    const key = `${cord[0]},${cord[1]}`;
+    const target = this.shipCords[key];
+
+    if (target) {
+      target.ship.hit();
+      target.hit = true;
+      return;
+    }
+    this.missedAttacks.push(cord);
+  }
+
+  areAllShipsSunk() {
+    for (let ship of this.allShips) {
+      if (!ship.isSunk()) {
+        return false;
+      }
+    }
+    return true;
   }
 }
