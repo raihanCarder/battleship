@@ -10,22 +10,25 @@ export default class GameBoard {
   }
 
   placeShip(startCord, direction, length) {
-    // currently assumes input is valid
-
     const ship = new Ship(length);
     const [x, y] = startCord;
+    const directionHorizontal = direction === "horizontal" ? true : false;
     let rowDiff = 0,
       colDiff = 0;
 
-    // check if out of bounds
+    if (!this.#isInBounds(x, y, directionHorizontal, length)) return false;
 
-    // check if all spaces are open
-
-    if (direction === "horizontal") {
+    if (directionHorizontal) {
       colDiff = 1;
     } else {
       rowDiff = 1;
     }
+
+    // case where one point of new ship is already taken
+
+    if (this.#doesOverlap(x, y, direction, length)) return false;
+
+    // safe, create ship
 
     for (let i = 0; i < length; i++) {
       const key = `${x + i * rowDiff},${y + i * colDiff}`;
@@ -34,7 +37,50 @@ export default class GameBoard {
         hit: false,
       };
     }
+
     this.allShips.push(ship);
+
+    return true;
+  }
+
+  #isInBounds(x, y, directionHorizontal, length) {
+    // case where trying to place horizontally but no space for ship
+    if (y + length > this.length && directionHorizontal) return false;
+
+    // case where trying to place vertically but no space for ship
+    if (x + length > this.height && !directionHorizontal) return false;
+
+    return true;
+  }
+
+  #doesOverlap(x, y, direction, length) {
+    const rowDiff = direction === "horizontal" ? 0 : 1;
+    const colDiff = direction === "horizontal" ? 1 : 0;
+
+    for (let i = 0; i < length; i++) {
+      const key = `${x + i * rowDiff},${y + i * colDiff}`;
+      if (this.shipCords[key]) return true;
+    }
+
+    return false;
+  }
+
+  randomShipPlacement(length) {
+    let foundCord = false;
+    while (!foundCord) {
+      let x = Math.floor(Math.random() * 9);
+      let y = Math.floor(Math.random() * 9);
+      const direction = Math.random() < 0.5 ? "horizontal" : "vertical";
+      let isHorizontal = direction === "horizontal" ? true : false;
+
+      if (
+        this.#isInBounds(x, y, isHorizontal, length) &&
+        !this.#doesOverlap(x, y, direction, length)
+      ) {
+        foundCord = true;
+        this.placeShip([x, y], direction, length);
+      }
+    }
   }
 
   receiveAttack(cord) {
