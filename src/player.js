@@ -47,6 +47,7 @@ class ComputerPlayer extends Player {
   }
 
   async computerMove(enemyPlayer) {
+    // test
     let validPoint = false;
     let board = enemyPlayer.board;
     let shipSunk = false;
