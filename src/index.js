@@ -29,7 +29,7 @@ function initGame() {
     if (!skipComp) {
       if (player2 instanceof ComputerPlayer) {
         let playAgain = true;
-        while (playAgain) {
+        while (playAgain && !player1.board.areAllShipsSunk()) {
           playAgain = await player2.computerMove(player1);
         }
       } else {

@@ -49,32 +49,21 @@ class ComputerPlayer extends Player {
   async computerMove(enemyPlayer) {
     let validPoint = false;
     let board = enemyPlayer.board;
+    let shipSunk = false;
 
     while (!validPoint) {
       let row, col;
 
       if (this.queue.length) {
         const firstEl = this.queue.shift();
-        let randomCord;
 
         row = firstEl[0];
         col = firstEl[1];
-
-        const tempArr = this.#getValidAdjMoves(row, col, board);
-
-        if (tempArr.length) {
-          randomCord = tempArr[this.#getRandomNum(tempArr.length)];
-          row = randomCord[0];
-          col = randomCord[1];
-        } else {
-          // fail safe
-          row = this.#getRandomNum(10);
-          col = this.#getRandomNum(10);
-        }
       } else {
         row = this.#getRandomNum(10);
         col = this.#getRandomNum(10);
       }
+      console.log(row + " " + col);
 
       const validMove = board.receiveAttack([row, col]);
 
@@ -97,11 +86,24 @@ class ComputerPlayer extends Player {
             dom.updateGameLog(
               `Computer Sinks your Ship of length ${board.shipCords[key].ship.length}!`
             );
+            shipSunk = true;
           } else {
             dom.updateGameLog(`Computer Hits at ${row},${col}!`);
           }
 
-          this.queue.push([row, col]);
+          if (!shipSunk) {
+            const tempArr = this.#shuffle(
+              this.#getValidAdjMoves(row, col, board)
+            );
+
+            for (let move of tempArr) {
+              this.queue.push(move);
+            }
+          } else {
+            this.queue = [];
+            shipSunk = false;
+          }
+
           return true; // thus move again (code in index)
         } else {
           // miss case
@@ -147,6 +149,14 @@ class ComputerPlayer extends Player {
 
   #getRandomNum(length) {
     return Math.floor(Math.random() * length);
+  }
+
+  #shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
   }
 }
 
