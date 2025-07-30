@@ -114,7 +114,7 @@ export default class GameBoard {
     // if not in missed attacks add
     this.missedAttacks.add(key);
 
-    return false;
+    return true;
   }
 
   areAllShipsSunk() {

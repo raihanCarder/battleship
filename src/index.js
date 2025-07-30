@@ -1,17 +1,13 @@
 import "./styles.css";
 import { RealPlayer, ComputerPlayer } from "./player";
-import domManager from "./dom";
-
-export let player1 = "";
-export let player2 = "";
+import { dom, initDomManager } from "./dom";
 
 function initGame() {
-  player1 = new RealPlayer("Raihan");
-  player2 = new ComputerPlayer();
+  let player1 = new RealPlayer("Raihan");
+  let player2 = new ComputerPlayer();
   player1.board.placeRandomFullFleet();
   player2.board.placeRandomFullFleet();
-
-  const dom = domManager(playRound);
+  initDomManager(playRound);
   dom.initDom(player1, player2, "Computer");
 
   function playRound(e) {
@@ -20,15 +16,15 @@ function initGame() {
 
     // first user attacks
     const enemy = cell.dataset.player === player1.name ? player1 : player2;
-    player1.playerMove(cell, dom, enemy);
+    player1.playerMove(cell, enemy);
 
     // computer attacks
 
     if (player2 instanceof ComputerPlayer) {
       player2.computerMove(player1);
+    } else {
+      // player2 attacks if coop mode
     }
-
-    // player2 attacks if coop mode
 
     // check if game over
 

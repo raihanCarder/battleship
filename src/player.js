@@ -1,4 +1,5 @@
 import GameBoard from "./gameBoard";
+import { dom } from "./dom";
 
 class Player {
   constructor(name) {
@@ -12,18 +13,19 @@ class RealPlayer extends Player {
     super(name);
   }
 
-  playerMove(cell, dom, enemy) {
+  playerMove(cell, enemy) {
     const row = parseInt(cell.dataset.row, 10);
     const col = parseInt(cell.dataset.col, 10);
 
     console.log("Clicked:", row, col, enemy.name);
 
     const attackHit = enemy.board.receiveAttack([row, col]);
+    const key = `${row},${col}`;
 
-    if (attackHit) {
-      dom.attackedCell(cell, "hit");
+    if (attackHit && enemy.board.shipCords[key]) {
+      dom.attackedCell(cell, true);
     } else {
-      dom.attackedCell(cell, "miss");
+      dom.attackedCell(cell, false);
     }
   }
 }
@@ -47,9 +49,16 @@ class ComputerPlayer extends Player {
         validPoint = true;
         console.log("computerMove Complete");
         console.log("Computer Attacked" + row + " " + col);
+        const key = `${row},${col}`;
         const cell = document.querySelector(
           `.cell[data-row="${row}"][data-col="${col}"][data-player="${enemyPlayer.name}"]`
         );
+
+        if (enemyPlayer.board.shipCords[key]) {
+          dom.attackedCell(cell, true);
+        } else {
+          dom.attackedCell(cell, false);
+        }
       }
     }
   }

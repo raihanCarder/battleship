@@ -1,4 +1,10 @@
-export default function domManager(playRoundFunc) {
+let dom;
+
+function initDomManager(func) {
+  dom = domManager(func);
+}
+
+function domManager(playRoundFunc) {
   const playerBoard = document.getElementById("content-player");
   const enemyBoard = document.getElementById("content-enemy");
   const player1Name = document.getElementById("player1-name");
@@ -55,7 +61,7 @@ export default function domManager(playRoundFunc) {
   }
 
   function attackedCell(cell, hit) {
-    if (hit === "hit") {
+    if (hit) {
       cell.classList.add("hit");
     } else {
       cell.classList.add("miss");
@@ -66,10 +72,4 @@ export default function domManager(playRoundFunc) {
   return { initDom, attackedCell };
 }
 
-// function initDomManager() {
-//   dom = domManager();
-// }
-
-// let dom;
-
-// export { dom, initDomManager };
+export { dom, initDomManager };
