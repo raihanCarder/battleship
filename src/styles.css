@@ -5,16 +5,23 @@
 }
 
 :root {
-  --body-color: #1c1f26;
+  --body-color: #0f172a;
   --gameBoard-color: inherit;
+  --title-text: #f1f1f1;
   --ship-color: rgba(0, 128, 255, 0.8);
   --ship-hit: rgba(255, 0, 0, 0.8);
   --ship-miss: rgba(200, 200, 200, 0.7);
+  --subsection-color: #1c2536;
+  --subsection-txt-clr: #cbd5e1;
+  --msg-log-bg: #111827;
+  --msg-log-txt: #e2e8f0;
+  --msg-log-border: 1px solid #334155;
+  --msg-log-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 body {
   background-color: var(--body-color);
-
+  line-height: 1.5;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,6 +34,7 @@ body {
 
 body > h1 {
   font-size: 3rem;
+  color: var(--title-text);
 }
 
 /* Main Section */
@@ -60,6 +68,9 @@ body > h1 {
   align-items: center;
   flex-direction: column;
   font-size: 1.5rem;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    /* main drop shadow */ inset 0 1px 0 rgba(255, 255, 255, 0.05); /* gentle inner light edge */
 }
 
 #player1-name,
@@ -123,9 +134,10 @@ body > h1 {
 /* Design */
 
 .message-log {
-  background-color: black;
-  color: green;
-
+  background-color: var(--msg-log-bg);
+  color: var(--msg-log-txt);
+  box-shadow: var(--msg-log-shadow);
+  border: var(--msg-log-border);
   min-width: 80%;
   border-radius: 10px;
   padding: 10px;
@@ -140,9 +152,10 @@ body > h1 {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  background-color: antiquewhite;
+  background-color: var(--subsection-color);
   padding: 0.3rem;
   border: 1px solid black;
+  color: var(--subsection-txt-clr);
 
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;

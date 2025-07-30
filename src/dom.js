@@ -12,6 +12,7 @@ function domManager(playRoundFunc) {
   const randomBtn = document.getElementById("randomize-ships-btn");
   const startBtn = document.getElementById("start-btn");
   const menuBtn = document.getElementById("");
+  const gameLog = document.getElementById("game-log");
 
   function initDom(player1, player2, mode) {
     player1Name.textContent = player1.name;
@@ -29,6 +30,7 @@ function domManager(playRoundFunc) {
       enemyBoard.classList.remove("disabled-board");
       startBtn.disabled = true;
       randomBtn.disabled = true;
+      updateGameLog("ATTACK THE ENEMY SHIPS!!!");
     });
   }
 
@@ -91,7 +93,18 @@ function domManager(playRoundFunc) {
     cell.classList.add("disabled-cell");
   }
 
-  return { initDom, attackedCell };
+  function updateGameLog(msg) {
+    gameLog.textContent = msg;
+  }
+
+  function disableBoardToggle(player) {
+    if (player.name === "Computer") {
+      enemyBoard.classList.toggle("disabled-board");
+    } else {
+      playerBoard.classList.toggle("disabled-board");
+    }
+  }
+  return { initDom, attackedCell, updateGameLog, disableBoardToggle };
 }
 
 export { dom, initDomManager };
