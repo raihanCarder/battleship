@@ -4,19 +4,20 @@ export default class GameBoard {
   constructor(boardLength = 10, boardHeight = 10) {
     this.length = boardLength;
     this.height = boardHeight;
-    this.missedAttacks = [];
+    this.missedAttacks = new Set();
     this.shipCords = {};
     this.allShips = [];
   }
 
   placeShip(startCord, direction, length) {
     const ship = new Ship(length);
-    const [x, y] = startCord;
+    const row = startCord[0];
+    const col = startCord[1];
     const directionHorizontal = direction === "horizontal" ? true : false;
     let rowDiff = 0,
       colDiff = 0;
 
-    if (!this.#isInBounds(x, y, directionHorizontal, length)) return false;
+    if (!this.#isInBounds(row, col, directionHorizontal, length)) return false;
 
     if (directionHorizontal) {
       colDiff = 1;
@@ -26,12 +27,12 @@ export default class GameBoard {
 
     // case where one point of new ship is already taken
 
-    if (this.#doesOverlap(x, y, direction, length)) return false;
+    if (this.#doesOverlap(row, col, direction, length)) return false;
 
     // safe, create ship
 
     for (let i = 0; i < length; i++) {
-      const key = `${x + i * rowDiff},${y + i * colDiff}`;
+      const key = `${row + i * rowDiff},${col + i * colDiff}`;
       this.shipCords[key] = {
         ship: ship,
         hit: false,
@@ -83,17 +84,37 @@ export default class GameBoard {
     }
   }
 
+  placeRandomFullFleet(lengths = [5, 3, 2, 3, 1]) {
+    for (let length of lengths) {
+      this.randomShipPlacement(length);
+    }
+  }
+
   receiveAttack(cord) {
     // doesn't check if cord already hit or in missed attacks
     const key = `${cord[0]},${cord[1]}`;
     const target = this.shipCords[key];
 
+    // already missed return false
+    if (this.missedAttacks.has(key)) return false;
+
+    // on ship cord
+
     if (target) {
+      // if already hit return false
+      if (target.hit) return false;
+
+      // else target exists and not hit so hit
+
       target.ship.hit();
       target.hit = true;
-      return;
+      return true;
     }
-    this.missedAttacks.push(cord);
+
+    // if not in missed attacks add
+    this.missedAttacks.add(key);
+
+    return false;
   }
 
   areAllShipsSunk() {

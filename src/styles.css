@@ -1,3 +1,91 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --body-color: gray;
+  --gameBoard-color: inherit;
+  --ship-color: rgba(0, 128, 255, 0.8);
+  --ship-hit: rgba(255, 0, 0, 0.8);
+  --ship-miss: rgba(200, 200, 200, 0.7);
+}
+
 body {
-  background-color: red;
+  background-color: var(--body-color);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+}
+
+/* Main Section */
+
+.gameBoards {
+  background-color: var(--gameBoard-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Player 1, 2 section */
+
+.player1-section,
+.player2-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: 1.5rem;
+  gap: 0.1rem;
+}
+
+#content-player,
+#content-enemy {
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url("images/ocean.jpg");
+}
+
+.grid-container {
+  width: 500px;
+  height: 500px;
+}
+
+.disabled-board {
+  pointer-events: none; /* Makes it so everything disabled while opponent turn*/
+}
+
+.cell {
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+  background: rgba(255, 255, 255, 0.3);
+  opacity: 0.9;
+}
+
+.cell:hover {
+  opacity: 0.4;
+}
+
+.ship {
+  background-color: var(--ship-color);
+}
+
+.hit {
+  background-color: var(--ship-hit);
+}
+
+.miss {
+  background-color: var(--ship-miss);
+}
+
+.disabled-cell {
+  pointer-events: none;
 }
