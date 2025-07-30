@@ -43,6 +43,7 @@ class RealPlayer extends Player {
 class ComputerPlayer extends Player {
   constructor() {
     super("Computer");
+    this.queue = [];
   }
 
   async computerMove(enemyPlayer) {
@@ -50,10 +51,34 @@ class ComputerPlayer extends Player {
     let board = enemyPlayer.board;
 
     while (!validPoint) {
-      const row = Math.floor(Math.random() * 10);
-      const col = Math.floor(Math.random() * 10);
+      let row, col;
+
+      if (this.queue.length) {
+        const firstEl = this.queue.shift();
+        let randomCord;
+
+        row = firstEl[0];
+        col = firstEl[1];
+
+        const tempArr = this.#getValidAdjMoves(row, col, board);
+
+        if (tempArr.length) {
+          randomCord = tempArr[this.#getRandomNum(tempArr.length)];
+          row = randomCord[0];
+          col = randomCord[1];
+        } else {
+          // fail safe
+          row = this.#getRandomNum(10);
+          col = this.#getRandomNum(10);
+        }
+      } else {
+        row = this.#getRandomNum(10);
+        col = this.#getRandomNum(10);
+      }
 
       const validMove = board.receiveAttack([row, col]);
+
+      // if valid then see if hit or miss
 
       if (validMove) {
         validPoint = true;
@@ -65,27 +90,63 @@ class ComputerPlayer extends Player {
 
         await this.#delay(800);
 
-        if (enemyPlayer.board.shipCords[key]) {
+        // hit case
+        if (board.shipCords[key]) {
           dom.attackedCell(cell, true);
-          if (enemyPlayer.board.shipCords[key].ship.isSunk()) {
+          if (board.shipCords[key].ship.isSunk()) {
             dom.updateGameLog(
-              `Computer Sinks your Ship of length ${enemyPlayer.board.shipCords[key].ship.length}!`
+              `Computer Sinks your Ship of length ${board.shipCords[key].ship.length}!`
             );
           } else {
             dom.updateGameLog(`Computer Hits at ${row},${col}!`);
           }
-          return true;
+
+          this.queue.push([row, col]);
+          return true; // thus move again (code in index)
         } else {
+          // miss case
           dom.attackedCell(cell, false);
           dom.updateGameLog(`Computer Misses at ${row},${col}! Your Turn!`);
-          return false;
+          return false; // thus turn ends (code in index)
         }
       }
     }
   }
 
+  #getValidAdjMoves(row, col, board) {
+    const directions = [
+      [0, -1],
+      [0, 1],
+      [1, 0],
+      [-1, 0],
+    ];
+    const valid = [];
+
+    for (const [dr, dc] of directions) {
+      const r = row + dr;
+      const c = col + dc;
+      const key = `${r},${c}`;
+
+      if (r < 0 || r > 9 || c < 0 || c > 9) continue;
+      if (board.missedAttacks.has(key)) continue;
+      if (board.shipCords[key]) {
+        if (board.shipCords[key].hit) {
+          continue;
+        }
+      }
+
+      valid.push([r, c]);
+    }
+
+    return valid;
+  }
+
   #delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  #getRandomNum(length) {
+    return Math.floor(Math.random() * length);
   }
 }
 
