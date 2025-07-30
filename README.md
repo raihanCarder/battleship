@@ -2,7 +2,7 @@
 
 A Fun Recreation of the Popular Game Battleship.
 
-This project I focused on TDD (Test driven Development) and making the Battleship AI fun and thinking about Complexity as I code my project.
+This project I focused on TDD (Test driven Development) and making the Battleship AI fun while thinking about Complexity and the most optimized ways to do things.
 
 ## Features
 
