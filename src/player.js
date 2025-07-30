@@ -24,6 +24,7 @@ class RealPlayer extends Player {
 
     if (attackHit && enemy.board.shipCords[key]) {
       dom.attackedCell(cell, true);
+      if (enemy.board.shipCords[key].ship.isSunk()) console.log("SHIP SUNK");
     } else {
       dom.attackedCell(cell, false);
     }
@@ -56,6 +57,8 @@ class ComputerPlayer extends Player {
 
         if (enemyPlayer.board.shipCords[key]) {
           dom.attackedCell(cell, true);
+          if (enemyPlayer.board.shipCords[key].ship.isSunk())
+            console.log("SUNKEN SHIP");
         } else {
           dom.attackedCell(cell, false);
         }

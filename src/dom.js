@@ -9,11 +9,35 @@ function domManager(playRoundFunc) {
   const enemyBoard = document.getElementById("content-enemy");
   const player1Name = document.getElementById("player1-name");
   const player2Name = document.getElementById("player2-name");
+  const randomBtn = document.getElementById("randomize-ships-btn");
+  const startBtn = document.getElementById("start-btn");
+  const menuBtn = document.getElementById("");
 
   function initDom(player1, player2, mode) {
     player1Name.textContent = player1.name;
     player2Name.textContent = player2.name;
+    enemyBoard.classList.add("disabled-board");
+    playerBoard.classList.add("disabled-board");
+
     fill(player1, player2, mode);
+    initRandomizeBtn(player1);
+    initStartBtn();
+  }
+
+  function initStartBtn() {
+    startBtn.addEventListener("click", () => {
+      enemyBoard.classList.remove("disabled-board");
+      startBtn.disabled = true;
+      randomBtn.disabled = true;
+    });
+  }
+
+  function initRandomizeBtn(player) {
+    randomBtn.addEventListener("click", () => {
+      player.board.resetBoard();
+      player.board.placeRandomFullFleet();
+      fillBoard(playerBoard, player, true);
+    });
   }
 
   function fill(player1, player2, mode) {
@@ -54,17 +78,15 @@ function domManager(playRoundFunc) {
         board.appendChild(div);
       }
     }
-
-    if (seeShips) {
-      board.classList.add("disabled-board");
-    }
   }
 
   function attackedCell(cell, hit) {
     if (hit) {
       cell.classList.add("hit");
+      cell.textContent = "💥";
     } else {
       cell.classList.add("miss");
+      cell.textContent = "💧";
     }
     cell.classList.add("disabled-cell");
   }

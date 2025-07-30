@@ -84,7 +84,7 @@ export default class GameBoard {
     }
   }
 
-  placeRandomFullFleet(lengths = [5, 3, 2, 3, 1]) {
+  placeRandomFullFleet(lengths = [5, 3, 3, 2, 1]) {
     for (let length of lengths) {
       this.randomShipPlacement(length);
     }
@@ -124,5 +124,11 @@ export default class GameBoard {
       }
     }
     return true;
+  }
+
+  resetBoard() {
+    this.missedAttacks = new Set();
+    this.shipCords = {};
+    this.allShips = [];
   }
 }

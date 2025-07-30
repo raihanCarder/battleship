@@ -6,14 +6,28 @@
     <title>Battleship</title>
   </head>
   <body>
-    <div class="gameBoards">
-      <div class="player1-section">
-        <h1 id="player1-name"></h1>
-        <div id="content-player" class="grid-container"></div>
+    <h1>BATTLESHIP</h1>
+    <div class="main-section">
+      <div class="message-log">
+        WELCOME TO BATTLESHIP! CLICK START GAME TO PLAY...
       </div>
-      <div class="player2-section">
-        <h1 id="player2-name"></h1>
-        <div id="content-enemy" class="grid-container"></div>
+      <div class="gameBoards">
+        <div class="player1-section">
+          <div id="content-player" class="grid-container"></div>
+          <div class="button-section">
+            <p id="player1-name"></p>
+            <div class="buttons">
+              <button id="randomize-ships-btn">Randomize Ships</button>
+              <button id="start-btn">Start Game</button>
+            </div>
+          </div>
+        </div>
+        <div class="player2-section">
+          <div id="content-enemy" class="grid-container"></div>
+          <div class="button-section">
+            <p id="player2-name"></p>
+          </div>
+        </div>
       </div>
     </div>
   </body>

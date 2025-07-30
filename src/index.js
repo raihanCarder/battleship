@@ -2,9 +2,11 @@ import "./styles.css";
 import { RealPlayer, ComputerPlayer } from "./player";
 import { dom, initDomManager } from "./dom";
 
+let player1, player2;
+
 function initGame() {
-  let player1 = new RealPlayer("Raihan");
-  let player2 = new ComputerPlayer();
+  player1 = new RealPlayer("You");
+  player2 = new ComputerPlayer();
   player1.board.placeRandomFullFleet();
   player2.board.placeRandomFullFleet();
   initDomManager(playRound);
@@ -23,7 +25,7 @@ function initGame() {
     if (player2 instanceof ComputerPlayer) {
       player2.computerMove(player1);
     } else {
-      // player2 attacks if coop mode
+      // player2 attacks if coop mode (If want to add this feature)
     }
 
     // check if game over
