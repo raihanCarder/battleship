@@ -175,6 +175,8 @@ button {
   border-radius: 10px;
 }
 
+/* Button Designs */
+
 #randomize-ships-btn {
   background-color: #ff6666;
   border: 1px solid #8b0000;
@@ -202,5 +204,20 @@ button {
 
 #start-btn:disabled:hover {
   background-color: #90ee90;
+  cursor: not-allowed;
+}
+
+#reset-btn {
+  background-color: #f97316;
+  border: 1px solid #fb923c;
+}
+
+#reset-btn:hover {
+  background-color: #ea580c;
+  cursor: pointer;
+}
+
+#reset-btn:disabled:hover {
+  background-color: #f97316;
   cursor: not-allowed;
 }

@@ -20,9 +20,11 @@ function initGame() {
     const enemy = cell.dataset.player === player1.name ? player1 : player2;
     let skipComp = player1.playerMove(cell, enemy);
 
-    // computer attacks
-
+    // disable reset btn and enemy board while computer move
+    dom.disableResetBtn();
     dom.disableBoardToggle(player2);
+
+    // computer attacks
 
     if (!skipComp) {
       if (player2 instanceof ComputerPlayer) {
@@ -35,6 +37,7 @@ function initGame() {
       }
     }
 
+    // reenable board after move
     dom.disableBoardToggle(player2);
 
     // check if game over
@@ -42,8 +45,12 @@ function initGame() {
     const check = checkIfGameOver(player1, player2);
 
     if (check) {
-      // display play again button
+      // if won disable board and enable reset btn
+      dom.gameOverResetBtn();
       dom.disableBoardToggle(player2);
+    } else {
+      // enable reset btn on player turn
+      dom.enableResetBtn();
     }
   }
 

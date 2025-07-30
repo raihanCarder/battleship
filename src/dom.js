@@ -11,8 +11,9 @@ function domManager(playRoundFunc) {
   const player2Name = document.getElementById("player2-name");
   const randomBtn = document.getElementById("randomize-ships-btn");
   const startBtn = document.getElementById("start-btn");
-  const menuBtn = document.getElementById("");
   const gameLog = document.getElementById("game-log");
+  const resetBtn = document.getElementById("reset-btn");
+  resetBtn.disabled = true;
 
   function initDom(player1, player2, mode) {
     player1Name.textContent = player1.name;
@@ -22,7 +23,16 @@ function domManager(playRoundFunc) {
 
     fill(player1, player2, mode);
     initRandomizeBtn(player1);
+    initResetBtn(player1, player2);
     initStartBtn();
+  }
+
+  function enableResetBtn() {
+    resetBtn.disabled = false;
+  }
+
+  function disableResetBtn() {
+    resetBtn.disabled = true;
   }
 
   function initStartBtn() {
@@ -30,7 +40,32 @@ function domManager(playRoundFunc) {
       enemyBoard.classList.remove("disabled-board");
       startBtn.disabled = true;
       randomBtn.disabled = true;
+      enableResetBtn();
+
       updateGameLog("ATTACK THE ENEMY SHIPS!!!");
+    });
+  }
+
+  function gameOverResetBtn() {
+    resetBtn.textContent = "Play Again?";
+    enableResetBtn();
+  }
+
+  function initResetBtn(player1, player2) {
+    resetBtn.addEventListener("click", () => {
+      player1.board.resetBoard();
+      player2.board.resetBoard();
+      player1.board.placeRandomFullFleet();
+      player2.board.placeRandomFullFleet();
+
+      enemyBoard.classList.add("disabled-board");
+      updateGameLog("Game Reset, Change Ships Or Play Again!");
+      fill(player1, player2, "Computer");
+      resetBtn.textContent = "Reset";
+
+      startBtn.disabled = false;
+      randomBtn.disabled = false;
+      disableResetBtn();
     });
   }
 
@@ -104,7 +139,15 @@ function domManager(playRoundFunc) {
       playerBoard.classList.toggle("disabled-board");
     }
   }
-  return { initDom, attackedCell, updateGameLog, disableBoardToggle };
+  return {
+    initDom,
+    attackedCell,
+    updateGameLog,
+    disableBoardToggle,
+    gameOverResetBtn,
+    enableResetBtn,
+    disableResetBtn,
+  };
 }
 
 export { dom, initDomManager };
